@@ -2,24 +2,29 @@
 
 goto_position() {
     # Function to go to prest position
-    POSITION=$1
-    echo "GOING TO POSITION : $POSITION"
+    # Arg1 : URL of the camera
+    # Argé : Name of the position to go to
+    CAM="$1"
+    POSITION="$2"
+    echo "GOING TO POSITION : $POSITION"  >> $LOG_FILE
 
-    curl -s "$(cmd_url ptzGotoPresetPoint)&name=$POSITION" > /dev/null
+    curl -s "$(cmd_url $CAM ptzGotoPresetPoint)&name=$POSITION" > /dev/null
 
-    sleep 20
-    take_picture $POSITION
+    sleep $TRAVEL_DURATION
 }
 
 take_picture(){
     # Function to take a picture and save it locally
-    PICTURE_NAME="$CAM-$POSITION-$(date +%m-%d-%y).jpg"
-    wget "$(cmd_url snapPicture2)" -O "$PICTURE_NAME"
-    echo "$PICTURE_NAME"
+    # Arg1 : URL of the camera
+    CAM="$1"
+    PICTURE_NAME="$PICTURE_PATH/$CAM-$POSITION.jpg"
+    wget "$(cmd_url $CAM snapPicture2)" -O "$PICTURE_NAME" -o /dev/null  >> $LOG_FILE
 }
 
 cmd_url(){
     # Helper function to build the URI
-    CMD="$1"
+    # Arg1 : URL of the camera
+    CAM="$1"
+    CMD="$2"
     echo "http://$CAM/cgi-bin/CGIProxy.fcgi?cmd=$CMD&usr=$USER&pwd=$PSSWD"
 }
