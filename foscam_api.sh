@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Defaults
+
+# Path to save the pictures
+PICTURE_PATH=${PICTURE_PATH:-./}
+# Path to the log-file
+LOG_FILE=${LOG_FILE:-foscam_api.log}
+# Time to sleep while the camera is moving
+TRAVEL_DURATION=${TRAVEL_DURATION:-10}
+
 goto_position() {
     # Function to go to prest position
     # Arg1 : URL of the camera
